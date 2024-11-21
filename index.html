@@ -1,48 +1,105 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <link rel="icon" href="%PUBLIC_URL%/favicon.ico" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="theme-color" content="#000000" />
-    <meta name="description" content="Calculate a forex lot size" />
-    <link rel="apple-touch-icon" href="%PUBLIC_URL%/logo192.png" />
-    <!--
-      manifest.json provides metadata used when your web app is installed on a
-      user's mobile device or desktop. See https://developers.google.com/web/fundamentals/web-app-manifest/
-    -->
-    <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
-    <!--
-      Notice the use of %PUBLIC_URL% in the tags above.
-      It will be replaced with the URL of the `public` folder during the build.
-      Only files inside the `public` folder can be referenced from the HTML.
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lot Size Calculator</title>
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    body {
+      background-color: #f8f9fa;
+    }
+    .card {
+      margin-bottom: 20px;
+    }
+    .result {
+      font-size: 1.25rem;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <div class="container py-5">
+    <h1 class="text-center mb-4">Lot Size Calculator</h1>
 
-      Unlike "/favicon.ico" or "favicon.ico", "%PUBLIC_URL%/favicon.ico" will
-      work correctly both with client-side routing and a non-root public URL.
-      Learn how to configure a non-root public URL by running `npm run build`.
-    -->
-    <title>Lot Size Calculator</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@1/css/pico.min.css">
-  </head>
-  <body>
-    <noscript>You need to enable JavaScript to run this app.</noscript>
-    <main id="root" class="container"></main>
-    <!--
-      This HTML file is a template.
-      If you open it directly in the browser, you will see an empty page.
-
-      You can add webfonts, meta tags, or analytics to this file.
-      The build step will place the bundled scripts into the <body> tag.
-
-      To begin the development, run `npm start` or `yarn start`.
-      To create a production bundle, use `npm run build` or `yarn build`.
-    -->
-    <footer>
-      <div class="grid">
-        <div>best effort; no guarantee of accuracy</div>
-        <div><a class="contrast" href="https://github.com/maxbeizer/lot-size-calculator">source code</a></div>
-        <div>©️ 2023 <a class="contrast" href="https://github.com/maxbeizer">@maxbeizer</a></div>
+    <!-- EUR/USD Section -->
+    <div class="card">
+      <div class="card-body">
+        <h2 class="card-title">EUR/USD</h2>
+        <form id="eur-form">
+          <div class="mb-3">
+            <label for="eur-balance" class="form-label">Account Balance (€)</label>
+            <input type="number" class="form-control" id="eur-balance" placeholder="Enter your balance" required>
+          </div>
+          <div class="mb-3">
+            <label for="eur-risk" class="form-label">Risk (%)</label>
+            <input type="number" class="form-control" id="eur-risk" placeholder="Enter your risk percentage" required>
+          </div>
+          <div class="mb-3">
+            <label for="eur-stoploss" class="form-label">Stop Loss (pips)</label>
+            <input type="number" class="form-control" id="eur-stoploss" placeholder="Enter your stop loss in pips" required>
+          </div>
+          <button type="button" class="btn btn-primary w-100" onclick="calculateEUR()">Calculate</button>
+        </form>
+        <p class="result mt-3" id="eur-result"></p>
       </div>
-    </footer>
-  </body>
+    </div>
+
+    <!-- GER40 Section -->
+    <div class="card">
+      <div class="card-body">
+        <h2 class="card-title">GER40</h2>
+        <form id="ger-form">
+          <div class="mb-3">
+            <label for="ger-balance" class="form-label">Account Balance (€)</label>
+            <input type="number" class="form-control" id="ger-balance" placeholder="Enter your balance" required>
+          </div>
+          <div class="mb-3">
+            <label for="ger-risk" class="form-label">Risk (%)</label>
+            <input type="number" class="form-control" id="ger-risk" placeholder="Enter your risk percentage" required>
+          </div>
+          <div class="mb-3">
+            <label for="ger-stoploss" class="form-label">Stop Loss (points)</label>
+            <input type="number" class="form-control" id="ger-stoploss" placeholder="Enter your stop loss in points" required>
+          </div>
+          <button type="button" class="btn btn-primary w-100" onclick="calculateGER()">Calculate</button>
+        </form>
+        <p class="result mt-3" id="ger-result"></p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bootstrap JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+    function calculateEUR() {
+      const balance = parseFloat(document.getElementById('eur-balance').value);
+      const risk = parseFloat(document.getElementById('eur-risk').value);
+      const stoploss = parseFloat(document.getElementById('eur-stoploss').value);
+
+      if (balance && risk && stoploss) {
+        const riskAmount = (balance * risk) / 100;
+        const lotSize = riskAmount / stoploss;
+        document.getElementById('eur-result').innerText = `Recommended Lot Size: ${lotSize.toFixed(2)} lots`;
+      } else {
+        document.getElementById('eur-result').innerText = 'Please fill in all fields correctly.';
+      }
+    }
+
+    function calculateGER() {
+      const balance = parseFloat(document.getElementById('ger-balance').value);
+      const risk = parseFloat(document.getElementById('ger-risk').value);
+      const stoploss = parseFloat(document.getElementById('ger-stoploss').value);
+
+      if (balance && risk && stoploss) {
+        const riskAmount = (balance * risk) / 100;
+        const lotSize = riskAmount / stoploss;
+        document.getElementById('ger-result').innerText = `Recommended Lot Size: ${lotSize.toFixed(2)} lots`;
+      } else {
+        document.getElementById('ger-result').innerText = 'Please fill in all fields correctly.';
+      }
+    }
+  </script>
+</body>
 </html>
