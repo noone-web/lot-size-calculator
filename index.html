@@ -50,12 +50,47 @@
       </div>
     </div>
 
+    <!-- GER40 Section -->
+    <div class="card">
+      <div class="card-body">
+        <h2 class="card-title">GER40 (DE40)</h2>
+        <form id="ger-form">
+          <div class="mb-3">
+            <label for="ger-open-price" class="form-label">Open Price</label>
+            <input type="number" class="form-control" id="ger-open-price" placeholder="Enter open price for GER40" required>
+          </div>
+          <div class="mb-3">
+            <label for="ger-stop-price" class="form-label">Stop Loss Price</label>
+            <input type="number" class="form-control" id="ger-stop-price" placeholder="Enter stop loss price (auto -100)" required>
+          </div>
+          <div class="mb-3">
+            <label for="ger-balance" class="form-label">Account Balance ($)</label>
+            <input type="number" class="form-control" id="ger-balance" placeholder="Enter your balance in USD" required>
+          </div>
+          <div class="mb-3">
+            <label for="ger-risk" class="form-label">Risk (%)</label>
+            <input type="number" class="form-control" id="ger-risk" placeholder="Enter your risk percentage" required>
+          </div>
+          <div class="mb-3">
+            <label for="ger-usd-eur" class="form-label">USD/EUR Price</label>
+            <input type="number" class="form-control" id="ger-usd-eur" placeholder="Enter USD/EUR price (auto)" required>
+          </div>
+          <div class="mb-3">
+            <label for="ger-lot-size" class="form-label">Units per Lot (1 lot = Units)</label>
+            <input type="number" class="form-control" id="ger-lot-size" placeholder="Enter contract size (Units per Lot)" value="100" required>
+          </div>
+          <button type="button" class="btn btn-primary w-100" onclick="calculateGER40()">Calculate</button>
+        </form>
+        <p class="result mt-3" id="ger-result"></p>
+      </div>
+    </div>
+
   </div>
 
   <!-- Bootstrap JS -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
   <script>
-    // Calculate Lot Size based on the provided formula
+    // Calculate Lot Size for EUR/USD
     function calculateEUR() {
       const balance = parseFloat(document.getElementById('eur-balance').value);
       const risk = parseFloat(document.getElementById('eur-risk').value);
@@ -65,16 +100,37 @@
 
       if (balance && risk && stoploss && lotSizeUnits) {
         const riskAmount = (balance * risk) / 100;
-        // New calculation includes units per lot
-        const calculatedLotSize = (riskAmount) / (stoploss * pipValue * (lotSizeUnits / 100000)); // Adjusting for contract size
+        const calculatedLotSize = (riskAmount) / (stoploss * pipValue * (lotSizeUnits / 100000));
 
         const lotSizeRounded = calculatedLotSize.toFixed(2);
         
-        // Show the calculated lot size in terms of lot size units (not "lots")
         document.getElementById('eur-result').innerText = `Recommended Lot Size: ${lotSizeRounded} units (1 lot = ${lotSizeUnits} units)`;
 
       } else {
         document.getElementById('eur-result').innerText = 'Please fill in all fields correctly.';
+      }
+    }
+
+    // Calculate Lot Size for GER40 (DE40)
+    function calculateGER40() {
+      const openPrice = parseFloat(document.getElementById('ger-open-price').value);
+      const stopPrice = parseFloat(document.getElementById('ger-stop-price').value) || openPrice - 100;
+      const balance = parseFloat(document.getElementById('ger-balance').value);
+      const risk = parseFloat(document.getElementById('ger-risk').value);
+      const usdEurPrice = parseFloat(document.getElementById('ger-usd-eur').value);
+      const lotSizeUnits = parseFloat(document.getElementById('ger-lot-size').value);
+
+      if (balance && risk && openPrice && stopPrice && usdEurPrice && lotSizeUnits) {
+        const riskAmount = (balance * risk) / 100;
+        const stopLossValue = openPrice - stopPrice;
+        const calculatedLotSize = (riskAmount) / (stopLossValue * lotSizeUnits);
+
+        const lotSizeRounded = calculatedLotSize.toFixed(2);
+
+        document.getElementById('ger-result').innerText = `Recommended Lot Size for GER40: ${lotSizeRounded} units (1 lot = ${lotSizeUnits} units)`;
+
+      } else {
+        document.getElementById('ger-result').innerText = 'Please fill in all fields correctly.';
       }
     }
   </script>
