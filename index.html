@@ -62,7 +62,6 @@
               </div>
               <button type="button" class="btn btn-primary w-100" onclick="calculateEUR()">Calculate</button>
             </form>
-            <button type="button" class="btn btn-warning w-100 mt-3" onclick="clearCookies()">Clear Cookies</button>
             <p class="result mt-3" id="eur-result"></p>
           </div>
         </div>
@@ -93,21 +92,6 @@
       return null;
     }
 
-    // Function to delete a cookie
-    function deleteCookie(name) {
-      document.cookie = name + "=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/";
-    }
-
-    // Clear all cookies related to the calculator
-    function clearCookies() {
-      deleteCookie('eur-balance');
-      deleteCookie('eur-risk');
-      document.getElementById('eur-balance').value = '';
-      document.getElementById('eur-risk').value = '';
-      document.getElementById('eur-result').innerText = '';
-      alert('Cookies cleared and fields reset.');
-    }
-
     // Calculate Lot Size for EUR/USD
     function calculateEUR() {
       const balance = parseFloat(document.getElementById('eur-balance').value);
@@ -125,9 +109,14 @@
         const calculatedLotSize = (riskAmount) / (stoploss * pipValue * (lotSizeUnits / 100000));
 
         const lotSizeRounded = calculatedLotSize.toFixed(4);
-        
-        document.getElementById('eur-result').innerText = `Recommended Lot Size: ${lotSizeRounded} units (1 lot = ${lotSizeUnits} units)`;
+        const riskAmountRounded = riskAmount.toFixed(2);
 
+        document.getElementById('eur-result').innerHTML = `
+          <strong>Result:</strong><br>
+          Money risk, USD - $${riskAmountRounded}<br>
+          Units - ${lotSizeRounded}<br>
+          Sizing - ${calculatedLotSize.toFixed(4)} lots
+        `;
       } else {
         document.getElementById('eur-result').innerText = 'Please fill in all fields correctly.';
       }
