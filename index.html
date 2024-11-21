@@ -92,7 +92,7 @@
   <script>
     // Fetch current Open Price and USD/EUR price from API (example using Alpha Vantage)
     const fetchAPIData = async () => {
-      const apiKey = 'your-api-key'; // Заміни на свій API ключ
+      const apiKey = 'H6DW8GW9LP87TNCE'; // Ваш API ключ
       const eurToUsdUrl = `https://www.alphavantage.co/query?function=CURRENCY_EXCHANGE_RATE&from_currency=EUR&to_currency=USD&apikey=${apiKey}`;
       const gerToUsdUrl = `https://www.alphavantage.co/query?function=TIME_SERIES_INTRADAY&symbol=GER40&interval=5min&apikey=${apiKey}`;
 
@@ -146,4 +146,18 @@
       const lotSizeUnits = parseFloat(document.getElementById('ger-lot-size').value);
 
       if (balance && risk && openPrice && stopPrice && usdEurPrice && lotSizeUnits) {
-        const riskAmount = (balance
+        const riskAmount = (balance * risk) / 100;
+        const stopLossValue = openPrice - stopPrice;
+        const calculatedLotSize = (riskAmount) / (stopLossValue * lotSizeUnits);
+
+        const lotSizeRounded = calculatedLotSize.toFixed(4);
+
+        document.getElementById('ger-result').innerText = `Recommended Lot Size for GER40: ${lotSizeRounded} units (1 lot = ${lotSizeUnits} units)`;
+
+      } else {
+        document.getElementById('ger-result').innerText = 'Please fill in all fields correctly.';
+      }
+    }
+  </script>
+</body>
+</html>
