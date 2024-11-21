@@ -55,19 +55,19 @@
             <form id="eur-form">
               <div class="mb-3">
                 <label for="eur-balance" class="form-label">Account Balance ($)</label>
-                <input type="number" class="form-control" id="eur-balance" placeholder="Enter your balance in USD" required>
+                <input type="number" class="form-control" id="eur-balance" placeholder="-" required>
               </div>
               <div class="mb-3">
                 <label for="eur-risk" class="form-label">Risk (%)</label>
-                <input type="number" class="form-control" id="eur-risk" placeholder="Enter your risk percentage" required>
+                <input type="number" class="form-control" id="eur-risk" placeholder="-" required>
               </div>
               <div class="mb-3">
                 <label for="eur-stoploss" class="form-label">Stop Loss (pips)</label>
-                <input type="number" class="form-control" id="eur-stoploss" placeholder="Enter your stop loss in pips" required>
+                <input type="number" class="form-control" id="eur-stoploss" placeholder="-" required>
               </div>
               <div class="mb-3">
                 <label for="eur-lot-size" class="form-label">Units per Lot (1 lot = Units)</label>
-                <input type="number" class="form-control" id="eur-lot-size" placeholder="Enter contract size (Units per Lot)" value="100000" required>
+                <input type="number" class="form-control" id="eur-lot-size" placeholder="-" value="100000" required>
               </div>
               <button type="button" class="btn btn-primary w-100" onclick="calculateEUR()">Calculate</button>
             </form>
