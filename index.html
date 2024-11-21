@@ -41,8 +41,8 @@
             <input type="number" class="form-control" id="eur-stoploss" placeholder="Enter your stop loss in pips" required>
           </div>
           <div class="mb-3">
-            <label for="eur-lot-size" class="form-label">Trade Lot Size (Units per Lot)</label>
-            <input type="number" class="form-control" id="eur-lot-size" placeholder="Enter contract size" value="100000" required>
+            <label for="eur-lot-size" class="form-label">Units per Lot (1 lot = Units)</label>
+            <input type="number" class="form-control" id="eur-lot-size" placeholder="Enter contract size (Units per Lot)" value="100000" required>
           </div>
           <button type="button" class="btn btn-primary w-100" onclick="calculateEUR()">Calculate</button>
         </form>
@@ -65,12 +65,13 @@
 
       if (balance && risk && stoploss && lotSizeUnits) {
         const riskAmount = (balance * risk) / 100;
-        const calculatedLotSize = (riskAmount) / (stoploss * pipValue);
+        // New calculation includes units per lot
+        const calculatedLotSize = (riskAmount) / (stoploss * pipValue * lotSizeUnits);
 
         const lotSizeRounded = calculatedLotSize.toFixed(2);
         
         // Show the calculated lot size
-        document.getElementById('eur-result').innerText = `Recommended Lot Size: ${lotSizeRounded} lots`;
+        document.getElementById('eur-result').innerText = `Recommended Lot Size: ${lotSizeRounded} lots (1 lot = ${lotSizeUnits} units)`;
 
       } else {
         document.getElementById('eur-result').innerText = 'Please fill in all fields correctly.';
