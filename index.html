@@ -11,11 +11,25 @@
       background-color: #f8f9fa;
     }
     .card {
-      margin-bottom: 20px;
+      margin-bottom: 15px;
+      padding: 10px;
     }
     .result {
       font-size: 1.25rem;
       font-weight: bold;
+    }
+    .card-body {
+      padding: 10px;
+    }
+    .form-label {
+      font-size: 0.9rem;
+    }
+    .form-control {
+      height: 35px;
+      font-size: 0.9rem;
+    }
+    button {
+      padding: 10px;
     }
   </style>
 </head>
@@ -23,61 +37,66 @@
   <div class="container py-5">
     <h1 class="text-center mb-4">Forex Lot Size Calculator</h1>
 
-    <!-- EUR/USD Section -->
-    <div class="card">
-      <div class="card-body">
-        <h2 class="card-title">EUR/USD</h2>
-        <form id="eur-form">
-          <div class="mb-3">
-            <label for="eur-balance" class="form-label">Account Balance ($)</label>
-            <input type="number" class="form-control" id="eur-balance" placeholder="Enter your balance in USD" required>
+    <div class="row">
+      <!-- EUR/USD Section -->
+      <div class="col-md-6">
+        <div class="card">
+          <div class="card-body">
+            <h2 class="card-title h5">EUR/USD</h2>
+            <form id="eur-form">
+              <div class="mb-3">
+                <label for="eur-balance" class="form-label">Account Balance ($)</label>
+                <input type="number" class="form-control" id="eur-balance" placeholder="Enter your balance in USD" required>
+              </div>
+              <div class="mb-3">
+                <label for="eur-risk" class="form-label">Risk (%)</label>
+                <input type="number" class="form-control" id="eur-risk" placeholder="Enter your risk percentage" required>
+              </div>
+              <div class="mb-3">
+                <label for="eur-stoploss" class="form-label">Stop Loss (pips)</label>
+                <input type="number" class="form-control" id="eur-stoploss" placeholder="Enter your stop loss in pips" required>
+              </div>
+              <div class="mb-3">
+                <label for="eur-lot-size" class="form-label">Units per Lot (1 lot = Units)</label>
+                <input type="number" class="form-control" id="eur-lot-size" placeholder="Enter contract size (Units per Lot)" value="100000" required>
+              </div>
+              <button type="button" class="btn btn-primary w-100" onclick="calculateEUR()">Calculate</button>
+            </form>
+            <p class="result mt-3" id="eur-result"></p>
           </div>
-          <div class="mb-3">
-            <label for="eur-risk" class="form-label">Risk (%)</label>
-            <input type="number" class="form-control" id="eur-risk" placeholder="Enter your risk percentage" required>
-          </div>
-          <div class="mb-3">
-            <label for="eur-stoploss" class="form-label">Stop Loss (pips)</label>
-            <input type="number" class="form-control" id="eur-stoploss" placeholder="Enter your stop loss in pips" required>
-          </div>
-          <div class="mb-3">
-            <label for="eur-lot-size" class="form-label">Units per Lot (1 lot = Units)</label>
-            <input type="number" class="form-control" id="eur-lot-size" placeholder="Enter contract size (Units per Lot)" value="100000" required>
-          </div>
-          <button type="button" class="btn btn-primary w-100" onclick="calculateEUR()">Calculate</button>
-        </form>
-        <p class="result mt-3" id="eur-result"></p>
+        </div>
       </div>
-    </div>
 
-    <!-- External Position Size Calculator -->
-    <div class="card">
-      <div class="card-body">
-        <h2 class="card-title">Position Size Calculator</h2>
-        <div id="position-size-calculator-247568">
-          <script type="text/javascript" src="https://www.cashbackforex.com/Content/remote/remote-widgets.js"></script>
-          <script type="text/javascript">
-            RemoteCalc({
-              "Url":"https://www.cashbackforex.com",
-              "TopPaneStyle":"YmFja2dyb3VuZDogbGluZWFyLWdyYWRpZW50KCNmZmYgMjAlLCAjZjVmNWY1IDQ1JSk7IGNvbG9yOiBibGFjazsgYm9yZGVyOiBzb2xpZCAxcHggI2FhYTsgYm9yZGVyLWJvdHRvbTogbm9uZTsg",
-              "BottomPaneStyle":"YmFja2dyb3VuZDogI2YzZjNmMzsgYm9yZGVyOiBzb2xpZCAxcHggI2FhYTsgY29sb3I6IGJsYWNrOw==",
-              "ButtonStyle":"YmFja2dyb3VuZDogIzM0MzU0MDsgY29sb3I6IHdoaXRlOyBib3JkZXItcmFkaXVzOiAyMHB4Ow==",
-              "TitleStyle":"dGV4dC1hbGlnbjogbGVmdDsgZm9udC1zaXplOiA0MHB4OyBmb250LXdlaWdodDogNTAwOw==",
-              "TextboxStyle":"YmFja2dyb3VuZC1jb2xvcjogd2hpdGU7IGNvbG9yOiBibGFjazsgYm9yZGVyOiBzb2xpZCAxcHggI2FhYWFhYQ==",
-              "ContainerWidth":"665",
-              "HighlightColor":"#ffff00",
-              "IsDisplayTitle":false,
-              "IsShowChartLinks":false,
-              "IsShowEmbedButton":true,
-              "CompactType":"large",
-              "Calculator":"position-size-calculator",
-              "ContainerId":"position-size-calculator-247568"
-            });
-          </script>
+      <!-- External Position Size Calculator -->
+      <div class="col-md-6">
+        <div class="card">
+          <div class="card-body">
+            <h2 class="card-title h5">Position Size Calculator</h2>
+            <div id="position-size-calculator-247568">
+              <script type="text/javascript" src="https://www.cashbackforex.com/Content/remote/remote-widgets.js"></script>
+              <script type="text/javascript">
+                RemoteCalc({
+                  "Url":"https://www.cashbackforex.com",
+                  "TopPaneStyle":"YmFja2dyb3VuZDogbGluZWFyLWdyYWRpZW50KCNmZmYgMjAlLCAjZjVmNWY1IDQ1JSk7IGNvbG9yOiBibGFjazsgYm9yZGVyOiBzb2xpZCAxcHggI2FhYTsgYm9yZGVyLWJvdHRvbTogbm9uZTsg",
+                  "BottomPaneStyle":"YmFja2dyb3VuZDogI2YzZjNmMzsgYm9yZGVyOiBzb2xpZCAxcHggI2FhYTsgY29sb3I6IGJsYWNrOw==",
+                  "ButtonStyle":"YmFja2dyb3VuZDogIzM0MzU0MDsgY29sb3I6IHdoaXRlOyBib3JkZXItcmFkaXVzOiAyMHB4Ow==",
+                  "TitleStyle":"dGV4dC1hbGlnbjogbGVmdDsgZm9udC1zaXplOiA0MHB4OyBmb250LXdlaWdodDogNTAwOw==",
+                  "TextboxStyle":"YmFja2dyb3VuZC1jb2xvcjogd2hpdGU7IGNvbG9yOiBibGFjazsgYm9yZGVyOiBzb2xpZCAxcHggI2FhYWFhYQ==",
+                  "ContainerWidth":"665",
+                  "HighlightColor":"#ffff00",
+                  "IsDisplayTitle":false,
+                  "IsShowChartLinks":false,
+                  "IsShowEmbedButton":true,
+                  "CompactType":"large",
+                  "Calculator":"position-size-calculator",
+                  "ContainerId":"position-size-calculator-247568"
+                });
+              </script>
+            </div>
+          </div>
         </div>
       </div>
     </div>
-
   </div>
 
   <!-- Bootstrap JS -->
