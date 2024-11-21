@@ -62,6 +62,7 @@
               </div>
               <button type="button" class="btn btn-primary w-100" onclick="calculateEUR()">Calculate</button>
             </form>
+            <button type="button" class="btn btn-warning w-100 mt-3" onclick="clearCookies()">Clear Cookies</button>
             <p class="result mt-3" id="eur-result"></p>
           </div>
         </div>
@@ -90,6 +91,21 @@
         if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length, c.length);
       }
       return null;
+    }
+
+    // Function to delete a cookie
+    function deleteCookie(name) {
+      document.cookie = name + "=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/";
+    }
+
+    // Clear all cookies related to the calculator
+    function clearCookies() {
+      deleteCookie('eur-balance');
+      deleteCookie('eur-risk');
+      document.getElementById('eur-balance').value = '';
+      document.getElementById('eur-risk').value = '';
+      document.getElementById('eur-result').innerText = '';
+      alert('Cookies cleared and fields reset.');
     }
 
     // Calculate Lot Size for EUR/USD
