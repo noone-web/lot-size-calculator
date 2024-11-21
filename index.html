@@ -40,6 +40,10 @@
             <label for="eur-stoploss" class="form-label">Stop Loss (pips)</label>
             <input type="number" class="form-control" id="eur-stoploss" placeholder="Enter your stop loss in pips" required>
           </div>
+          <div class="mb-3">
+            <label for="eur-lot-size" class="form-label">Lot Size</label>
+            <input type="number" class="form-control" id="eur-lot-size" placeholder="Enter lot size" step="any">
+          </div>
           <button type="button" class="btn btn-primary w-100" onclick="calculateEUR()">Calculate</button>
         </form>
         <p class="result mt-3" id="eur-result"></p>
@@ -63,6 +67,10 @@
             <label for="ger-stoploss" class="form-label">Stop Loss (points)</label>
             <input type="number" class="form-control" id="ger-stoploss" placeholder="Enter your stop loss in points" required>
           </div>
+          <div class="mb-3">
+            <label for="ger-lot-size" class="form-label">Lot Size</label>
+            <input type="number" class="form-control" id="ger-lot-size" placeholder="Enter lot size" step="any">
+          </div>
           <button type="button" class="btn btn-primary w-100" onclick="calculateGER()">Calculate</button>
         </form>
         <p class="result mt-3" id="ger-result"></p>
@@ -73,13 +81,13 @@
   <!-- Bootstrap JS -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
   <script>
-    // Load saved lot size from localStorage on page load
+    // Load saved values from localStorage on page load
     window.onload = () => {
       if (localStorage.getItem('eur-lot-size')) {
-        document.getElementById('eur-result').innerText = `Saved Lot Size: ${localStorage.getItem('eur-lot-size')} lots`;
+        document.getElementById('eur-lot-size').value = localStorage.getItem('eur-lot-size');
       }
       if (localStorage.getItem('ger-lot-size')) {
-        document.getElementById('ger-result').innerText = `Saved Lot Size: ${localStorage.getItem('ger-lot-size')} lots`;
+        document.getElementById('ger-lot-size').value = localStorage.getItem('ger-lot-size');
       }
     };
 
@@ -87,13 +95,20 @@
       const balance = parseFloat(document.getElementById('eur-balance').value);
       const risk = parseFloat(document.getElementById('eur-risk').value);
       const stoploss = parseFloat(document.getElementById('eur-stoploss').value);
+      const lotSize = parseFloat(document.getElementById('eur-lot-size').value);
 
+      let calculatedLotSize;
       if (balance && risk && stoploss) {
-        const riskAmount = (balance * risk) / 100;
-        const lotSize = riskAmount / stoploss;
-        const lotSizeRounded = lotSize.toFixed(2);
+        if (!lotSize || isNaN(lotSize)) {
+          const riskAmount = (balance * risk) / 100;
+          calculatedLotSize = riskAmount / stoploss;
+        } else {
+          calculatedLotSize = lotSize;
+        }
 
-        // Save to localStorage
+        const lotSizeRounded = calculatedLotSize.toFixed(2);
+
+        // Save the lot size to localStorage
         localStorage.setItem('eur-lot-size', lotSizeRounded);
         document.getElementById('eur-result').innerText = `Recommended Lot Size: ${lotSizeRounded} lots (Saved)`;
       } else {
@@ -105,13 +120,20 @@
       const balance = parseFloat(document.getElementById('ger-balance').value);
       const risk = parseFloat(document.getElementById('ger-risk').value);
       const stoploss = parseFloat(document.getElementById('ger-stoploss').value);
+      const lotSize = parseFloat(document.getElementById('ger-lot-size').value);
 
+      let calculatedLotSize;
       if (balance && risk && stoploss) {
-        const riskAmount = (balance * risk) / 100;
-        const lotSize = riskAmount / stoploss;
-        const lotSizeRounded = lotSize.toFixed(2);
+        if (!lotSize || isNaN(lotSize)) {
+          const riskAmount = (balance * risk) / 100;
+          calculatedLotSize = riskAmount / stoploss;
+        } else {
+          calculatedLotSize = lotSize;
+        }
 
-        // Save to localStorage
+        const lotSizeRounded = calculatedLotSize.toFixed(2);
+
+        // Save the lot size to localStorage
         localStorage.setItem('ger-lot-size', lotSizeRounded);
         document.getElementById('ger-result').innerText = `Recommended Lot Size: ${lotSizeRounded} lots (Saved)`;
       } else {
