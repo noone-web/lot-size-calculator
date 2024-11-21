@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Lot Size Calculator</title>
+  <title>Forex Lot Size Calculator</title>
   <!-- Bootstrap CSS -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
   <style>
@@ -21,7 +21,7 @@
 </head>
 <body>
   <div class="container py-5">
-    <h1 class="text-center mb-4">Lot Size Calculator</h1>
+    <h1 class="text-center mb-4">Forex Lot Size Calculator</h1>
 
     <!-- EUR/USD Section -->
     <div class="card">
@@ -41,8 +41,8 @@
             <input type="number" class="form-control" id="eur-stoploss" placeholder="Enter your stop loss in pips" required>
           </div>
           <div class="mb-3">
-            <label for="eur-lot-size" class="form-label">Lot Size</label>
-            <input type="number" class="form-control" id="eur-lot-size" placeholder="Enter lot size" step="any">
+            <label for="eur-lot-size" class="form-label">Trade Lot Size (Units per Lot)</label>
+            <input type="number" class="form-control" id="eur-lot-size" placeholder="Enter contract size" value="100000" required>
           </div>
           <button type="button" class="btn btn-primary w-100" onclick="calculateEUR()">Calculate</button>
         </form>
@@ -50,94 +50,30 @@
       </div>
     </div>
 
-    <!-- GER40 Section -->
-    <div class="card">
-      <div class="card-body">
-        <h2 class="card-title">GER40</h2>
-        <form id="ger-form">
-          <div class="mb-3">
-            <label for="ger-balance" class="form-label">Account Balance ($)</label>
-            <input type="number" class="form-control" id="ger-balance" placeholder="Enter your balance in USD" required>
-          </div>
-          <div class="mb-3">
-            <label for="ger-risk" class="form-label">Risk (%)</label>
-            <input type="number" class="form-control" id="ger-risk" placeholder="Enter your risk percentage" required>
-          </div>
-          <div class="mb-3">
-            <label for="ger-stoploss" class="form-label">Stop Loss (points)</label>
-            <input type="number" class="form-control" id="ger-stoploss" placeholder="Enter your stop loss in points" required>
-          </div>
-          <div class="mb-3">
-            <label for="ger-lot-size" class="form-label">Lot Size</label>
-            <input type="number" class="form-control" id="ger-lot-size" placeholder="Enter lot size" step="any">
-          </div>
-          <button type="button" class="btn btn-primary w-100" onclick="calculateGER()">Calculate</button>
-        </form>
-        <p class="result mt-3" id="ger-result"></p>
-      </div>
-    </div>
   </div>
 
   <!-- Bootstrap JS -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
   <script>
-    // Load saved values from localStorage on page load
-    window.onload = () => {
-      if (localStorage.getItem('eur-lot-size')) {
-        document.getElementById('eur-lot-size').value = localStorage.getItem('eur-lot-size');
-      }
-      if (localStorage.getItem('ger-lot-size')) {
-        document.getElementById('ger-lot-size').value = localStorage.getItem('ger-lot-size');
-      }
-    };
-
+    // Calculate Lot Size based on the provided formula
     function calculateEUR() {
       const balance = parseFloat(document.getElementById('eur-balance').value);
       const risk = parseFloat(document.getElementById('eur-risk').value);
       const stoploss = parseFloat(document.getElementById('eur-stoploss').value);
-      const lotSize = parseFloat(document.getElementById('eur-lot-size').value);
+      const lotSizeUnits = parseFloat(document.getElementById('eur-lot-size').value);
+      const pipValue = 10; // For EUR/USD standard lot (100,000 units), pip value is approximately $10
 
-      let calculatedLotSize;
-      if (balance && risk && stoploss) {
-        if (!lotSize || isNaN(lotSize)) {
-          const riskAmount = (balance * risk) / 100;
-          calculatedLotSize = riskAmount / stoploss;
-        } else {
-          calculatedLotSize = lotSize;
-        }
+      if (balance && risk && stoploss && lotSizeUnits) {
+        const riskAmount = (balance * risk) / 100;
+        const calculatedLotSize = (riskAmount) / (stoploss * pipValue);
 
         const lotSizeRounded = calculatedLotSize.toFixed(2);
+        
+        // Show the calculated lot size
+        document.getElementById('eur-result').innerText = `Recommended Lot Size: ${lotSizeRounded} lots`;
 
-        // Save the lot size to localStorage
-        localStorage.setItem('eur-lot-size', lotSizeRounded);
-        document.getElementById('eur-result').innerText = `Recommended Lot Size: ${lotSizeRounded} lots (Saved)`;
       } else {
         document.getElementById('eur-result').innerText = 'Please fill in all fields correctly.';
-      }
-    }
-
-    function calculateGER() {
-      const balance = parseFloat(document.getElementById('ger-balance').value);
-      const risk = parseFloat(document.getElementById('ger-risk').value);
-      const stoploss = parseFloat(document.getElementById('ger-stoploss').value);
-      const lotSize = parseFloat(document.getElementById('ger-lot-size').value);
-
-      let calculatedLotSize;
-      if (balance && risk && stoploss) {
-        if (!lotSize || isNaN(lotSize)) {
-          const riskAmount = (balance * risk) / 100;
-          calculatedLotSize = riskAmount / stoploss;
-        } else {
-          calculatedLotSize = lotSize;
-        }
-
-        const lotSizeRounded = calculatedLotSize.toFixed(2);
-
-        // Save the lot size to localStorage
-        localStorage.setItem('ger-lot-size', lotSizeRounded);
-        document.getElementById('ger-result').innerText = `Recommended Lot Size: ${lotSizeRounded} lots (Saved)`;
-      } else {
-        document.getElementById('ger-result').innerText = 'Please fill in all fields correctly.';
       }
     }
   </script>
