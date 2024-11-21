@@ -66,12 +66,12 @@
       if (balance && risk && stoploss && lotSizeUnits) {
         const riskAmount = (balance * risk) / 100;
         // New calculation includes units per lot
-        const calculatedLotSize = (riskAmount) / (stoploss * pipValue * lotSizeUnits);
+        const calculatedLotSize = (riskAmount) / (stoploss * pipValue * (lotSizeUnits / 100000)); // Adjusting for contract size
 
         const lotSizeRounded = calculatedLotSize.toFixed(2);
         
-        // Show the calculated lot size
-        document.getElementById('eur-result').innerText = `Recommended Lot Size: ${lotSizeRounded} lots (1 lot = ${lotSizeUnits} units)`;
+        // Show the calculated lot size in terms of lot size units (not "lots")
+        document.getElementById('eur-result').innerText = `Recommended Lot Size: ${lotSizeRounded} units (1 lot = ${lotSizeUnits} units)`;
 
       } else {
         document.getElementById('eur-result').innerText = 'Please fill in all fields correctly.';
