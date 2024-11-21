@@ -108,14 +108,18 @@
         const riskAmount = (balance * risk) / 100;
         const calculatedLotSize = (riskAmount) / (stoploss * pipValue * (lotSizeUnits / 100000));
 
-        const lotSizeRounded = calculatedLotSize.toFixed(4);
+        // Correcting calculation for Units
+        const units = calculatedLotSize * lotSizeUnits;
+        
+        const lotSizeRounded = calculatedLotSize.toFixed(3);
+        const unitsRounded = units.toFixed(3);
         const riskAmountRounded = riskAmount.toFixed(2);
 
         document.getElementById('eur-result').innerHTML = `
           <strong>Result:</strong><br>
           Money risk, USD - $${riskAmountRounded}<br>
-          Units - ${lotSizeRounded}<br>
-          Sizing - ${calculatedLotSize.toFixed(4)} lots
+          Units - ${unitsRounded}<br>
+          Sizing - ${lotSizeRounded} lots
         `;
       } else {
         document.getElementById('eur-result').innerText = 'Please fill in all fields correctly.';
