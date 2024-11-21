@@ -73,6 +73,16 @@
   <!-- Bootstrap JS -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
   <script>
+    // Load saved lot size from localStorage on page load
+    window.onload = () => {
+      if (localStorage.getItem('eur-lot-size')) {
+        document.getElementById('eur-result').innerText = `Saved Lot Size: ${localStorage.getItem('eur-lot-size')} lots`;
+      }
+      if (localStorage.getItem('ger-lot-size')) {
+        document.getElementById('ger-result').innerText = `Saved Lot Size: ${localStorage.getItem('ger-lot-size')} lots`;
+      }
+    };
+
     function calculateEUR() {
       const balance = parseFloat(document.getElementById('eur-balance').value);
       const risk = parseFloat(document.getElementById('eur-risk').value);
@@ -81,7 +91,11 @@
       if (balance && risk && stoploss) {
         const riskAmount = (balance * risk) / 100;
         const lotSize = riskAmount / stoploss;
-        document.getElementById('eur-result').innerText = `Recommended Lot Size: ${lotSize.toFixed(2)} lots`;
+        const lotSizeRounded = lotSize.toFixed(2);
+
+        // Save to localStorage
+        localStorage.setItem('eur-lot-size', lotSizeRounded);
+        document.getElementById('eur-result').innerText = `Recommended Lot Size: ${lotSizeRounded} lots (Saved)`;
       } else {
         document.getElementById('eur-result').innerText = 'Please fill in all fields correctly.';
       }
@@ -95,7 +109,11 @@
       if (balance && risk && stoploss) {
         const riskAmount = (balance * risk) / 100;
         const lotSize = riskAmount / stoploss;
-        document.getElementById('ger-result').innerText = `Recommended Lot Size: ${lotSize.toFixed(2)} lots`;
+        const lotSizeRounded = lotSize.toFixed(2);
+
+        // Save to localStorage
+        localStorage.setItem('ger-lot-size', lotSizeRounded);
+        document.getElementById('ger-result').innerText = `Recommended Lot Size: ${lotSizeRounded} lots (Saved)`;
       } else {
         document.getElementById('ger-result').innerText = 'Please fill in all fields correctly.';
       }
